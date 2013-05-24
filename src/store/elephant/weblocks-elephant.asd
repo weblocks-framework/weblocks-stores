@@ -7,9 +7,9 @@
 
 (defsystem weblocks-elephant
   :name "weblocks-elephant"
-  :maintainer "Ian Eslick"
+  :maintainer "Ian Eslick, Olexiy Zamkoviy, Scott L. Burson"
   :author "Ian Eslick"
-  :version "0.1.0"
+  :version "0.1.1"
   :licence "LLGPL"
   :description "A weblocks backend for elephant."
   :depends-on (:moptilities :metatilities :elephant :weblocks :weblocks-memory :weblocks-stores)

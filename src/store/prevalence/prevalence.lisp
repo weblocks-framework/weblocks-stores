@@ -1,6 +1,6 @@
 
 (defpackage #:weblocks-prevalence
-  (:use :cl :metabang.utilities :cl-prevalence :weblocks :weblocks-memory)
+  (:use :cl :metabang.utilities :cl-prevalence :weblocks :weblocks-memory :weblocks-stores)
   (:shadowing-import-from :metabang.utilities #:size)
   (:shadowing-import-from :cl-prevalence #:id)
   (:export make-persistent-instance)

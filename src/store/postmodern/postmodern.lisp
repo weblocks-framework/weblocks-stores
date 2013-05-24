@@ -1,5 +1,5 @@
 (defpackage #:weblocks-postmodern
-  (:use :cl :postmodern :weblocks)
+  (:use :cl :postmodern :weblocks :weblocks-stores)
   (:shadowing-import-from :postmodern #:text)
   (:shadowing-import-from :weblocks #:commit-transaction)
   (:documentation

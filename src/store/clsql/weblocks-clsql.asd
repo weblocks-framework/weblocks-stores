@@ -9,7 +9,7 @@
   :name "weblocks-clsql"
   :maintainer "Olexiy Zamkoviy, Scott L. Burson"
   :author "Slava Akhmechet"
-  :version "0.1.0"
+  :version "0.1.1"
   :licence "LLGPL"
   :description "A weblocks backend for clsql."
   :depends-on (:closer-mop :metatilities :clsql :clsql-fluid :weblocks-stores)

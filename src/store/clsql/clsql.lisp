@@ -1,6 +1,6 @@
 
 (defpackage #:weblocks-clsql
-  (:use :cl :metabang.utilities :clsql :weblocks)
+  (:use :cl :metabang.utilities :clsql :weblocks :weblocks-stores)
   (:shadowing-import-from :metabang.utilities #:format-date #:filter
 			  #:print-date)
   (:documentation

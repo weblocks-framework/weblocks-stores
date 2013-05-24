@@ -1,7 +1,7 @@
 (in-package :cl-user)
 
 (defpackage #:weblocks-elephant
-  (:use :cl :weblocks :weblocks-memory :elephant :metatilities :metabang.moptilities)
+  (:use :cl :weblocks :weblocks-memory :elephant :metatilities :metabang.moptilities :weblocks-stores)
   (:shadowing-import-from :weblocks #:open-store #:close-store)
   (:shadowing-import-from :elephant #:find-item #:insert-item #:add-index)
   (:export #:defpclass)
