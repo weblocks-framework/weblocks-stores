@@ -2,9 +2,12 @@
 (defpackage #:weblocks-montezuma
   (:use :cl :weblocks :weblocks-stores)
   (:documentation
-   "A driver for weblocks backend store API that connects to montezuma index."))
+   "A driver for weblocks backend store API that connects to montezuma index.")
+  (:export #:*sorting-enabled-p*))
 
 (in-package :weblocks-montezuma)
+
+(defvar *sorting-enabled-p* nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initialization/finalization ;;;
@@ -75,14 +78,16 @@
           :num-docs (when range 
                       (- (cdr range) (car range)))
           :sort 
-          (when order-by
-                  (make-instance 'montezuma::sort 
-                                 :fields (list 
-                                           (make-instance 'montezuma::sort-field
-                                                          :name (string-downcase (car order-by))
-                                                          :reverse-p (equal (cdr order-by) :asc) 
-                                                          ;:sort-type (montezuma::make-sort-type "title") 
-                                                          )))))
+          (when (and order-by (or 
+                                *sorting-enabled-p* 
+                                (warn "Sorting is not enabled")))
+            (make-instance 'montezuma::sort 
+                           :fields (list 
+                                     (make-instance 'montezuma::sort-field
+                                                    :name (string-downcase (car order-by))
+                                                    :reverse-p (equal (cdr order-by) :asc) 
+                                                    ;:sort-type (montezuma::make-sort-type "title") 
+                                                    )))))
         (lambda (score-doc)
           (push 
             (montezuma-document->object 
