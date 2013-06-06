@@ -89,10 +89,11 @@ structure of type 'store-info' as value.")
   (unless (find name *store-names*)
     (push-end name *store-names*))
   ;; `*package*' should be appropriate as defstore should be toplevel
-  (dolist (probable-webapp-class (funcall (intern "PACKAGE-WEBAPP-CLASSES" "WEBLOCKS")))
-    (let ((value (funcall (intern "WEBAPP-DEFAULT-STORE-NAME" "WEBLOCKS") probable-webapp-class)))
-      (unless value
-        (funcall (fdefinition (list 'setf (intern "WEBAPP-DEFAULT-STORE-NAME" "WEBLOCKS")))  name probable-webapp-class)))))
+  (when (find-package :weblocks)
+    (dolist (probable-webapp-class (funcall (intern "PACKAGE-WEBAPP-CLASSES" "WEBLOCKS")))
+      (let ((value (funcall (intern "WEBAPP-DEFAULT-STORE-NAME" "WEBLOCKS") probable-webapp-class)))
+        (unless value
+          (funcall (fdefinition (list 'setf (intern "WEBAPP-DEFAULT-STORE-NAME" "WEBLOCKS")))  name probable-webapp-class))))))
 
 (defun %defstore-postdefine (name type)
   "Helper for `defstore'."
@@ -100,11 +101,11 @@ structure of type 'store-info' as value.")
   (let ((system-name (make-symbol (concatenate 'string "WEBLOCKS-" (symbol-name type)))))
     (unless (asdf:find-system system-name nil)
       (load (merge-pathnames
-	     (make-pathname :directory `(:relative "src" "store"
-					 ,(string-downcase (symbol-name type)))
-			    :name (string-downcase (symbol-name system-name))
-			    :type "asd")
-	     (asdf-system-directory :weblocks))))
+              (make-pathname :directory `(:relative "src" "store"
+                                          ,(string-downcase (symbol-name type)))
+                             :name (string-downcase (symbol-name system-name))
+                             :type "asd")
+              (asdf-system-directory :weblocks-stores))))
     (asdf:operate 'asdf:load-op system-name)))
 
 (defmacro defstore (name type &rest store-args)
