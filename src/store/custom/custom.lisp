@@ -9,10 +9,10 @@
    (data :initform nil :initarg :data)
    (store :initform nil :initarg :store)))
 
-(defmethod initialize-instance :before ((obj custom-store) &rest args)
+(defmethod initialize-instance :before ((obj custom-store) &rest args &key redefining-p)
   (let ((schema (getf args :classes)))
     (loop for (key value) on schema :by #'cddr do 
-          (when (find-class key nil)
+          (when (and (find-class key nil) (not (getf args :redefining-p)))
             (error "Class ~A already exists" key))
           (eval `(defclass ,key (data-element) 
                    ,(loop for (key reader) in (getf value :slots)
@@ -129,3 +129,6 @@
 (defmethod rollback-transaction ((store custom-store))
   ; No support for composable transactions
   nil)
+
+(defmethod replace-on-redefine-p ((store-type (eql :custom)))
+  t)

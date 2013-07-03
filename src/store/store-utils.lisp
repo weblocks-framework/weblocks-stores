@@ -125,8 +125,25 @@ is useful for binary images."
     `(progn
        (%defstore-predefine ',name ,type ,@(remove-keyword-parameter store-args :load-store-system-p))
        (defvar ,name nil)
+       (maybe-replace-store (quote ,name))
        ,(when load-store-system-p
               `(%defstore-postdefine ',name ,type)))))
+
+(defun maybe-replace-store (name)
+  "Replaces store on (defstore ...) call repeating. 
+   Works only for those stores for which (replace-on-redefine-p ...) is true"
+  (mapcar (lambda (store-name)
+            (when  (equal name store-name)
+              (let ((store-info (gethash store-name *stores*)))
+                (when (and (symbol-value store-name)
+                           (replace-on-redefine-p (store-info-type store-info)))
+                  (setf (symbol-value store-name)
+                        (apply #'open-store
+                               (store-info-type store-info)
+                               (append 
+                                 (store-info-args store-info)
+                                 (list :redefining-p t))))))))
+          *store-names*))
 
 (defun open-stores ()
   "Opens and binds all stores."

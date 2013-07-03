@@ -6,7 +6,7 @@
 	  dynamic-transaction use-dynamic-transaction-p
 	  persist-object delete-persistent-object
 	  delete-persistent-object-by-id find-persistent-objects
-	  find-persistent-object-by-id count-persistent-objects))
+	  find-persistent-object-by-id count-persistent-objects replace-on-redefine-p))
 
 ;;; Store initialization and finalization
 (defgeneric open-store (store-type &rest args)
@@ -132,3 +132,7 @@
   Other implementation dependent keys may be defined by a given
   store."))
 
+(defgeneric replace-on-redefine-p (store-type)
+  (:documentation "When true replaces existing store on reexecuting (defstore ...) block.")
+  (:method (store-type)
+   nil))
