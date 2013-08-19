@@ -3,7 +3,7 @@
 
 (export '(class-id-slot-name object-id-slot-name object-id id
 	  class-store object-store defstore persist-objects
-	  mapstores open-stores *store-names*))
+	  mapstores open-stores *store-names* close-stores))
 
 (declaim (special *default-store*))
 

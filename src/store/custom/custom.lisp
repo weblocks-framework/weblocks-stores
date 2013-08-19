@@ -132,3 +132,8 @@
 
 (defmethod replace-on-redefine-p ((store-type (eql :custom)))
   t)
+
+(defmethod clean-store ((store custom-store))
+  "No need in cleaning, just overriding"
+  (declare (ignore store)))
+
