@@ -44,12 +44,19 @@
       (funcall count-objects class-name)
       (length (find-persistent-objects store class-name)))))
 
+(defun object->data-element (object class-name store)
+  "Transforms some data to weblocks-custom:data-element "
+  (make-instance class-name 
+                 :data object 
+                 :data-class class-name 
+                 :store store))
+
 (defun objects->data-elements (list-of-objects class-name store)
+  "Transforms list of data elements to weblocks-custom:data-element"
   (loop for i in list-of-objects 
-        collect (make-instance class-name 
-                               :data i 
-                               :data-class class-name 
-                               :store store))) 
+        collect (if (subtypep (type-of i) 'data-element)
+                  i
+                  (object->data-element i class-name store)))) 
 
 (defmethod find-persistent-objects ((store custom-store) 
                                     class-name
