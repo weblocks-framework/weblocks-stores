@@ -9,10 +9,10 @@
   :name "weblocks-store-test"
   :maintainer "Olexiy Zamkoviy, Scott L. Burson"
   :author "Slava Akhmechet"
-  :version "0.1.0"
+  :version "0.1.1"
   :licence "LLGPL"
   :description "A test suite for weblocks backend stores."
-  :depends-on (:rt :weblocks :lift :f-underscore :weblocks-memory)
+  :depends-on (:weblocks :lift :f-underscore :weblocks-memory :weblocks-test)
   :components 
   ((:module test
     :components

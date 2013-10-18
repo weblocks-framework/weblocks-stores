@@ -1,8 +1,12 @@
 
 (defpackage #:weblocks-store-test
-  (:use :cl :weblocks :lift :f-underscore :weblocks-stores :weblocks-util :metabang.utilities))
+  (:use :cl :weblocks :lift :f-underscore :weblocks-stores :weblocks-util :metabang.utilities)
+  (:export :do-all-tests))
 
 (in-package :weblocks-store-test)
+
+(defun do-all-tests ()
+  (run-tests :suite 'store-suite))
 
 (deftestsuite weblocks-suite ()
   ()
