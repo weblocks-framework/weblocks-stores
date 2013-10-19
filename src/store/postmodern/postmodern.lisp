@@ -20,15 +20,15 @@ a transaction via SQL BEGIN.")
 ;;; Initialization/finalization ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmethod open-store ((store-type (eql :postmodern)) &rest args
-		       &key db user pass host
-		       (pooled-p t) (port 5432) (use-ssl :no))
+                       &key db user pass host
+                       (pooled-p t) (port 5432) (use-ssl :no))
   "You /really/ want to use thread pools. They're good for you
 so we use them by default. The db, user, pass and host keyword
 arguments are required."
   (declare (ignore args))
   (assert (and db user pass host))
   (setf *default-store* (connect db user pass host
-				 :port port :pooled-p pooled-p :use-ssl use-ssl))
+                                 :port port :pooled-p pooled-p :use-ssl use-ssl))
   (setf *database* *default-store*))
 
 (defmethod close-store ((store database-connection))
@@ -53,42 +53,42 @@ arguments are required."
 ;;;;;;;;;;;;;;;;;;;;
 (defmethod begin-transaction ((store database-connection))
   (let* ((thread (bordeaux-threads:current-thread))
-	 (transaction (gethash thread *transactions*)))
+         (transaction (gethash thread *transactions*)))
     ;; Postgres doesn't support nested transactions
     ;; so ensure we're not in a transaction first
     ;; TODO: Support this via Savepoints/postmodern:with-savepoint
     (if transaction
-	(progn
-	  (ecase *nested-transaction-behavior*
-	    (:warn
-	       (warn "Could not initiate nested transaction."))
-	    (:ignore
-	       nil)
-	    (:error
-	       (error "Could not initiate nested transaction.")))
-	  (incf (cdr (gethash thread *transactions*))))
-	(progn
-	  (setf (gethash thread *transactions*)
-		(cons (make-instance 'postmodern::transaction-handle) 0))
-	  (execute "BEGIN")))))
+        (progn
+          (ecase *nested-transaction-behavior*
+            (:warn
+               (warn "Could not initiate nested transaction."))
+            (:ignore
+               nil)
+            (:error
+               (error "Could not initiate nested transaction.")))
+          (incf (cdr (gethash thread *transactions*))))
+        (progn
+          (setf (gethash thread *transactions*)
+                (cons (make-instance 'postmodern::transaction-handle) 0))
+          (execute "BEGIN")))))
 
 (defmethod commit-transaction ((store database-connection))
   (let* ((thread (bordeaux-threads:current-thread))
-	 (transaction (gethash thread *transactions*)))
+         (transaction (gethash thread *transactions*)))
     (if (zerop (cdr transaction))
-	(progn
-	  (postmodern:commit-transaction (car transaction))
-	  (setf (gethash thread *transactions*) nil))
-	(decf (cdr (gethash thread *transactions*))))))
+        (progn
+          (postmodern:commit-transaction (car transaction))
+          (setf (gethash thread *transactions*) nil))
+        (decf (cdr (gethash thread *transactions*))))))
 
 (defmethod rollback-transaction ((store database-connection))
   (let* ((thread (bordeaux-threads:current-thread))
-	 (transaction (gethash thread *transactions*)))
+         (transaction (gethash thread *transactions*)))
     (if (zerop (cdr transaction))
-	(progn
-	  (abort-transaction (car transaction))
-	  (setf (gethash thread *transactions*) nil))
-	(decf (cdr (gethash thread *transactions*))))))
+        (progn
+          (abort-transaction (car transaction))
+          (setf (gethash thread *transactions*) nil))
+        (decf (cdr (gethash thread *transactions*))))))
 
 (defmethod dynamic-transaction ((store database-connection) proc)
   (with-transaction ()
@@ -129,17 +129,17 @@ arguments are required."
   (get-dao class-name object-id))
 
 (defmethod find-persistent-objects ((store database-connection) class-name
-				    &key order-by range where
-				    &allow-other-keys)
+                                    &key order-by range where
+                                    &allow-other-keys)
   (let* ((base-expr `(:select '* :from ,class-name ,@(when where (list :where where))))
-	 (order-expr (or `(,@(when order-by
-			       `(:order-by ,base-expr ,(car order-by)))) base-expr))
-	 (sql-expr (or `(,@(when range
-			     `(:limit ,order-expr ,(cdr range) ,(car range)))) order-expr)))
+         (order-expr (or `(,@(when order-by
+                               `(:order-by ,base-expr ,(car order-by)))) base-expr))
+         (sql-expr (or `(,@(when range
+                             `(:limit ,order-expr ,(cdr range) ,(car range)))) order-expr)))
     (query-dao class-name (sql-compile sql-expr))))
 
 (defmethod count-persistent-objects ((store database-connection) class-name
-				     &key where &allow-other-keys)
+                                     &key where &allow-other-keys)
   (let ((sql-expr `(:select (:count '*) :from ,class-name
-			    ,@(when where (list :where where)))))
+                            ,@(when where (list :where where)))))
     (query (sql-compile sql-expr) :single)))

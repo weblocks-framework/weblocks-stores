@@ -3,8 +3,8 @@
 (in-package :weblocks-memory)
 
 (export '(make-scratch-store objects-from-scratch-store
-	  order-objects-in-memory strictly-less-p equivalentp
-	  range-objects-in-memory))
+          order-objects-in-memory strictly-less-p equivalentp
+          range-objects-in-memory))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;; Scratch stores ;;;
@@ -21,7 +21,7 @@ from them."
 it."
   (loop for table being the hash-values in (memory-store-root-objects store)
        append (loop for i being the hash-values in (persistent-objects-of-class-by-id table)
-		 collect i)))
+                 collect i)))
 
 ;;;;;;;;;;;;;
 ;;; Order ;;;
@@ -55,12 +55,12 @@ function is used by the framework for sorting data.")
   (if (and seq
            order-by)
       (stable-sort seq
-		   (if (equalp (cdr order-by) :asc)
-		       #'strictly-less-p
-		       (lambda (a b)
-			 (and (not (strictly-less-p a b))
-			      (not (equivalentp a b)))))
-		   :key (curry-after #'slot-value-by-path (car order-by)))
+                   (if (equalp (cdr order-by) :asc)
+                       #'strictly-less-p
+                       (lambda (a b)
+                         (and (not (strictly-less-p a b))
+                              (not (equivalentp a b)))))
+                   :key (curry-after #'slot-value-by-path (car order-by)))
       seq))
 
 ;;;;;;;;;;;;;

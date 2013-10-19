@@ -2,11 +2,11 @@
 (in-package :weblocks-stores)
 
 (export '(open-store close-store clean-store *default-store*
-	  begin-transaction commit-transaction rollback-transaction
-	  dynamic-transaction use-dynamic-transaction-p
-	  persist-object delete-persistent-object
-	  delete-persistent-object-by-id find-persistent-objects
-	  find-persistent-object-by-id count-persistent-objects replace-on-redefine-p))
+          begin-transaction commit-transaction rollback-transaction
+          dynamic-transaction use-dynamic-transaction-p
+          persist-object delete-persistent-object
+          delete-persistent-object-by-id find-persistent-objects
+          find-persistent-object-by-id count-persistent-objects replace-on-redefine-p))
 
 ;;; Store initialization and finalization
 (defgeneric open-store (store-type &rest args)
@@ -56,17 +56,17 @@
   STORE.  See `use-dynamic-transaction-p' for details.")
   (:method (store proc)
     (warn "~S should not be called when the other transaction ~
-	   interface is available" 'dynamic-transaction)
+           interface is available" 'dynamic-transaction)
     (let (tx-error-occurred-p)
       (unwind-protect
-	   (handler-bind ((error #'(lambda (error)
-				     (declare (ignore error))
-				     (rollback-transaction store)
-				     (setf tx-error-occurred-p t))))
-	     (begin-transaction store)
-	     (funcall proc))
-	(unless tx-error-occurred-p
-	  (commit-transaction store))))))
+           (handler-bind ((error #'(lambda (error)
+                                     (declare (ignore error))
+                                     (rollback-transaction store)
+                                     (setf tx-error-occurred-p t))))
+             (begin-transaction store)
+             (funcall proc))
+        (unless tx-error-occurred-p
+          (commit-transaction store))))))
 
 (defgeneric use-dynamic-transaction-p (store)
   (:documentation "Answer whether `action-txn-hook' and equivalents
@@ -103,8 +103,8 @@
   found, returns NIL."))
 
 (defgeneric find-persistent-objects (store class-name
-					   &key order-by range
-					   &allow-other-keys)
+                                           &key order-by range
+                                           &allow-other-keys)
   (:documentation "Looks up and returns objects of appropriate
   'class-name' in the 'store' bound by the given keyword
   parameters.

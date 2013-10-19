@@ -18,17 +18,17 @@
   ((id :col-type serial
        :initarg :id :reader id)
    (company :col-type string
-	    :initarg :company :accessor company)
+            :initarg :company :accessor company)
    (first-name :col-type string
-	       :initarg :first-name :accessor first-name)
+               :initarg :first-name :accessor first-name)
    (last-name :col-type string
-	      :initarg :last-name :accessor last-name)
+              :initarg :last-name :accessor last-name)
    (quote :col-type string
-	  :initarg :quote :accessor movie-quote)
+          :initarg :quote :accessor movie-quote)
    (tps-reports :col-type boolean
-		:initarg :tps-reports :accessor tps-reports)
+                :initarg :tps-reports :accessor tps-reports)
    (stapler :col-type boolean
-	    :initarg :stapler :accessor stapler))
+            :initarg :stapler :accessor stapler))
   (:metaclass dao-class)
   (:keys id))
 
@@ -36,30 +36,30 @@
 
 (defparameter *bill*
   (make-instance 'employee
-		 :company "Initech"
-		 :first-name "Bill"
-		 :last-name "Lumbergh"
-		 :quote "Yeeeaaaaah."
-		 :tps-reports nil
-		 :stapler nil))
+                 :company "Initech"
+                 :first-name "Bill"
+                 :last-name "Lumbergh"
+                 :quote "Yeeeaaaaah."
+                 :tps-reports nil
+                 :stapler nil))
 
 (defparameter *peter*
   (make-instance 'employee
-		 :company "Initech"
-		 :first-name "Peter"
-		 :last-name "Gibbons"
-		 :quote "The thing is, Bob, it's not that I'm lazy, it's that I just don't care."
-		 :tps-reports nil
-		 :stapler nil))
+                 :company "Initech"
+                 :first-name "Peter"
+                 :last-name "Gibbons"
+                 :quote "The thing is, Bob, it's not that I'm lazy, it's that I just don't care."
+                 :tps-reports nil
+                 :stapler nil))
 
 (defparameter *milton*
   (make-instance 'employee
-		 :company "Initech"
-		 :first-name "Milton"
-		 :last-name "Waddams"
-		 :quote "I could set the building on fire."
-		 :tps-reports t
-		 :stapler t))
+                 :company "Initech"
+                 :first-name "Milton"
+                 :last-name "Waddams"
+                 :quote "I could set the building on fire."
+                 :tps-reports t
+                 :stapler t))
 
 (defun test-creation ()
   (format t "***Testing Creation...~%")
@@ -73,16 +73,16 @@
 
 (defun display-employee-count ()
   (format t "Employees count: ~A~%"
-	  (count-persistent-objects *postmodern-store* 'employee)))
+          (count-persistent-objects *postmodern-store* 'employee)))
 
 (defun test-retrieval ()
   (format t "***Testing Retrieval...~%")
   (display-employee-count)
   (let ((emp (find-persistent-object-by-id *postmodern-store* 'employee 1)))
     (format t "Employee 1: ~S whose name is ~A~%" emp
-	    (concatenate 'string (first-name emp) " " (last-name emp))))
+            (concatenate 'string (first-name emp) " " (last-name emp))))
   (format t "Employees: ~S~%~%"
-	  (find-persistent-objects *postmodern-store* 'employee))
+          (find-persistent-objects *postmodern-store* 'employee))
   (when (find-persistent-object-by-id *postmodern-store* 'employee 1)
     (setf (second *test-status*) t)))
 
@@ -108,7 +108,7 @@
   (format t "Bill: Yeah...you're gonna have to talk to payroll...about that.~%")
   (format t "Meanwhile Peter's attempts to steal haven't been going so well...~%")
   (let ((employee (car (find-persistent-objects *postmodern-store* 'employee
-						:where '(:= 'first-name "Peter")))))
+                                                :where '(:= 'first-name "Peter")))))
     (delete-persistent-object *postmodern-store* employee))
   (format t "Peter: I think I might be going away for a little while...to jail.~%")
   (display-employee-count)
@@ -130,11 +130,11 @@
     (persist-object *postmodern-store* employee)
     (format t "~A~%~%" (movie-quote employee))
     (when (= (cdr (gethash (bordeaux-threads:current-thread)
-			   weblocks-postmodern::*transactions*)) 1)
+                           weblocks-postmodern::*transactions*)) 1)
       (setf (fifth *test-status*) t))
     (commit-transaction *postmodern-store*))
   (unless (= (cdr (gethash (bordeaux-threads:current-thread)
-			   weblocks-postmodern::*transactions*)) 0)
+                           weblocks-postmodern::*transactions*)) 0)
     (setf (fifth *test-status*) nil))
   (commit-transaction *postmodern-store*))
 
@@ -147,18 +147,18 @@
 
 (defun run-all-tests (&key (db *db*) (user *user*) (pass *pass*) (host *host*))
   (let ((*db* db)
-	(*user* user)
-	(*pass* pass)
-	(*host* host))
+        (*user* user)
+        (*pass* pass)
+        (*host* host))
     (setf *postmodern-store* (open-store :postmodern :db *db* :user *user*
-					 :pass *pass* :host *host*))
+                                         :pass *pass* :host *host*))
     (unwind-protect (test-all)
       (if (notevery #'null *test-status*)
-	  (format t "All tests passed!~%")
-	  (format t "Uh-oh! There were test failures..
+          (format t "All tests passed!~%")
+          (format t "Uh-oh! There were test failures..
 ~%Creation: ~A~%Retreival: ~A~%Updating: ~A~%Deletion: ~A~%Nested Transactions: ~A~%~%"
-		  (first *test-status*) (second *test-status*) (third *test-status*)
-		  (fourth *test-status*) (fifth *test-status*)))
+                  (first *test-status*) (second *test-status*) (third *test-status*)
+                  (fourth *test-status*) (fifth *test-status*)))
       (setf *test-status* (list nil nil nil nil nil))
       (query (:drop-table 'employee))
       (close-store *postmodern-store*))))

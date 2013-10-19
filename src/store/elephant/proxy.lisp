@@ -32,14 +32,14 @@
 (defun def-to-proxy-slot (def)
   `(,(weblocks::slot-definition-name def)
      ,@(mapcan #'(lambda (arg)
-		   `(:reader ,arg))
-	       (weblocks::slot-definition-readers def))
+                   `(:reader ,arg))
+               (weblocks::slot-definition-readers def))
      ,@(mapcan #'(lambda (arg)
-		   `(:writer ,arg))
-	       (weblocks::slot-definition-writers def))
+                   `(:writer ,arg))
+               (weblocks::slot-definition-writers def))
      ,@(mapcan #'(lambda (arg)
-		   `(:initarg ,arg))
-	       (weblocks::slot-definition-initargs def))
+                   `(:initarg ,arg))
+               (weblocks::slot-definition-initargs def))
      :initform ,(weblocks::slot-definition-initform def)
      :type ,(weblocks::slot-definition-type def)))
    
@@ -62,8 +62,8 @@
    be used to instantiate views"
   (let* ((classname (call-next-method)))
     (if (subtypep classname 'persistent)
-	(return-proxy-classname classname)
-	classname)))
+        (return-proxy-classname classname)
+        classname)))
 
 (defmethod weblocks::class-from-view :around (view &optional class-name)
   "Part of the quickview / dataform method for creating anonymous instances"
@@ -77,8 +77,8 @@
   (with-store-controller store
     (if (proxy-oid object)
         (let ((instance (elephant::controller-recreate-instance *store-controller* (proxy-oid object))))
-	  (ele::maybe-persistent-sync instance)
-	  instance)
+          (ele::maybe-persistent-sync instance)
+          instance)
         (let ((instance (make-instance (base-class object))))
           (loop for slot in (weblocks::class-slots (class-of object)) do
                (let ((slotname (weblocks::slot-definition-name slot)))

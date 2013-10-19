@@ -14,8 +14,8 @@
   :description "A weblocks backend for memory (not backed on disk)."
   :depends-on (:metatilities :cl-ppcre :weblocks-stores)
   :components ((:file "memory-store")
-	       (:file "memory-utils"
-		      :depends-on ("memory-store"))
-	       (:file "memory"
-		      :depends-on ("memory-store" "memory-utils"))))
+               (:file "memory-utils"
+                      :depends-on ("memory-store"))
+               (:file "memory"
+                      :depends-on ("memory-store" "memory-utils"))))
 

@@ -44,26 +44,26 @@
   (ensure (typep weblocks-stores::*stores* 'hash-table))
   (ensure (typep weblocks-stores::*store-names* 'list))
   (let ((fakestore (gensym))
-	(weblocks-stores::*stores* (make-hash-table))
-	(weblocks-stores::*store-names* '()))
+        (weblocks-stores::*stores* (make-hash-table))
+        (weblocks-stores::*store-names* '()))
     (eval `(defstore ,fakestore :memory))
     (weblocks-stores::open-stores)
     (unwind-protect
-	 (progn
-	   (ensure (symbol-value fakestore))
-	   (let ((oldval (symbol-value fakestore)))
-	     (eval `(defstore ,fakestore :memory))
-	     (ensure-same (symbol-value fakestore) oldval)))
+         (progn
+           (ensure (symbol-value fakestore))
+           (let ((oldval (symbol-value fakestore)))
+             (eval `(defstore ,fakestore :memory))
+             (ensure-same (symbol-value fakestore) oldval)))
       (weblocks-stores::close-stores))))
 
 ;;; test mapstores
 (deftest mapstores-1
     (weblocks-test::with-request :get nil
       (let ((i 0))
-	(mapstores (lambda (store)
-		     (declare (ignore store))
-		     (incf i)))
-	(> i 0)))
+        (mapstores (lambda (store)
+                     (declare (ignore store))
+                     (incf i)))
+        (> i 0)))
   t)
 
 ;;; test webapp/store association

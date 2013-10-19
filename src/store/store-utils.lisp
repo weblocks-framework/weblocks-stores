@@ -2,8 +2,8 @@
 (in-package :weblocks-stores)
 
 (export '(class-id-slot-name object-id-slot-name object-id id
-	  class-store object-store defstore persist-objects
-	  mapstores open-stores *store-names* close-stores))
+          class-store object-store defstore persist-objects
+          mapstores open-stores *store-names* close-stores))
 
 (declaim (special *default-store*))
 
@@ -36,10 +36,10 @@ object identification schemes.")
   (:method ((obj standard-object))
     (let ((object-id-slot-name (object-id-slot-name obj)))
       (handler-case (when (slot-boundp obj object-id-slot-name)
-		      (slot-value obj object-id-slot-name))
-	(error ()
+                      (slot-value obj object-id-slot-name))
+        (error ()
           (error "Cannot determine object ID. Object ~A has no slot '~A'."
-		 obj object-id-slot-name))))))
+                 obj object-id-slot-name))))))
 
 (defgeneric (setf object-id) (id obj)
   (:documentation
@@ -53,7 +53,7 @@ object identification schemes."))
   (handler-case (setf (slot-value obj (object-id-slot-name obj)) id)
     (error ()
       (error "Cannot determine object ID. Object ~A has no slot '~A'."
-	     obj (object-id-slot-name obj)))))
+             obj (object-id-slot-name obj)))))
 
 ;;; Object store location
 (defgeneric class-store (class-name)
@@ -85,7 +85,7 @@ structure of type 'store-info' as value.")
 (defun %defstore-predefine (name type &rest args)
   "Helper for `defstore'."
   (setf (gethash name *stores*)
-	(make-store-info :type type :args args))
+        (make-store-info :type type :args args))
   (unless (find name *store-names*)
     (push-end name *store-names*))
   ;; `*package*' should be appropriate as defstore should be toplevel

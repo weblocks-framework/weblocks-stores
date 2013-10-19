@@ -55,14 +55,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defclass persistent-objects-of-class ()
   ((objects-by-id :initform (make-hash-table)
-		  :accessor persistent-objects-of-class-by-id
-		  :documentation "A hashmap with keys being object
-		  IDs, and values being object instances.")
+                  :accessor persistent-objects-of-class-by-id
+                  :documentation "A hashmap with keys being object
+                  IDs, and values being object instances.")
    (next-id :initform -1
-	    :accessor persistent-objects-of-class-next-id
-	    :documentation "The ID of the last created object. When
-	    objects are created, this slot is incremented and its
-	    value is used to automatically generate object IDs."))
+            :accessor persistent-objects-of-class-next-id
+            :documentation "The ID of the last created object. When
+            objects are created, this slot is incremented and its
+            value is used to automatically generate object IDs."))
   (:documentation "This class represents an alternative to RDBMS
   table, holding object instances of a given class."))
 
@@ -75,28 +75,28 @@
 (defun tx-persist-object-prevalence (store object)
   "Persists the object in the store."
   (let* ((class-name (class-name (class-of object)))
-	 (objects (or (get-root-object store class-name)
-		      (setf (get-root-object store class-name)
-			    (make-instance 'persistent-objects-of-class))))
-	 (object-id (object-id object)))
+         (objects (or (get-root-object store class-name)
+                      (setf (get-root-object store class-name)
+                            (make-instance 'persistent-objects-of-class))))
+         (object-id (object-id object)))
     ; assign object id
     (if object-id
-	(when (< (persistent-objects-of-class-next-id objects) object-id)
-	  (setf (persistent-objects-of-class-next-id objects) (1+ object-id)))
-	(setf (object-id object)
-	      (incf (persistent-objects-of-class-next-id objects))))
+        (when (< (persistent-objects-of-class-next-id objects) object-id)
+          (setf (persistent-objects-of-class-next-id objects) (1+ object-id)))
+        (setf (object-id object)
+              (incf (persistent-objects-of-class-next-id objects))))
     ; store the object
     (setf (gethash (object-id object) (persistent-objects-of-class-by-id objects))
-	  object)))
+          object)))
 
 (defmethod delete-persistent-object ((store prevalence-system) object)
   (execute store (make-transaction 'tx-delete-object-by-id-prevalence
-				   (class-name (class-of object))
-				   (object-id object))))
+                                   (class-name (class-of object))
+                                   (object-id object))))
 
 (defmethod delete-persistent-object-by-id ((store prevalence-system) class-name object-id)
   (execute store (make-transaction 'tx-delete-object-by-id-prevalence
-				   class-name object-id)))
+                                   class-name object-id)))
 
 (defun tx-delete-object-by-id-prevalence (store class-name object-id)
   "Delets a persistent object from the store."
@@ -117,7 +117,7 @@
       (gethash object-id (persistent-objects-of-class-by-id objects)))))
 
 (defmethod find-persistent-objects ((store prevalence-system) class-name 
-				    &key (filter nil) order-by range slot
+                                    &key (filter nil) order-by range slot
                                          (value nil value-given)
                                          (test #'equal))
   "The slot and value keys must appear together.  If they appear, a
@@ -126,23 +126,23 @@ requires all objects to have the given value in the given slot."
   (range-objects-in-memory
    (order-objects-in-memory
     (let* ((seq (query store 'tx-find-persistent-objects-prevalence class-name))
-	   (seq2 (cond
-		   ((and seq slot value-given)
-		    (remove-if-not
-		      (lambda (obj)
+           (seq2 (cond
+                   ((and seq slot value-given)
+                    (remove-if-not
+                      (lambda (obj)
                         (cond
                           ((not (slot-exists-p obj slot))
                            (warn "FIND-PERSISTENT-OBJECTS: object ~A doesn't have the slot ~A" obj slot))
                           ((not (slot-boundp obj slot))
                            (warn "FIND-PERSISTENT-OBJECTS: slot ~A of object ~A is not bound" obj slot))
                           (t (funcall test (slot-value obj slot) value))))
-		      seq))
-		   (t seq)))
-	   (seq3 (cond
-		   ((and seq2
-			 (functionp filter))
-		    (remove-if-not filter seq2))
-		   (t seq2))))
+                      seq))
+                   (t seq)))
+           (seq3 (cond
+                   ((and seq2
+                         (functionp filter))
+                    (remove-if-not filter seq2))
+                   (t seq2))))
       seq3)
     order-by)
    range))
@@ -152,7 +152,7 @@ requires all objects to have the given value in the given slot."
   (let ((objects (get-root-object store class-name)))
     (when objects
       (loop for i being the hash-values in (persistent-objects-of-class-by-id objects)
-	 collect i))))
+         collect i))))
 
 (defmethod count-persistent-objects ((store prevalence-system) class-name &rest args)
   (length (apply #'find-persistent-objects store class-name args)))

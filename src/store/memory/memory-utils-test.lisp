@@ -78,8 +78,8 @@
     (with-request :get nil
       (length
        (weblocks:filter-objects-in-memory
-	(list *joe* *bob*) "o"
-	'(:slots (age) :mode :strict))))
+        (list *joe* *bob*) "o"
+        '(:slots (age) :mode :strict))))
   0)
 
 (deftest filter-objects-in-memory-4
@@ -153,10 +153,10 @@
 ;;; test range-objects-in-memory
 (deftest range-objects-in-memory-1
     (range-objects-in-memory (list 1 2 3 4 5)
-			     nil)
+                             nil)
   (1 2 3 4 5))
 
 (deftest range-objects-in-memory-2
     (range-objects-in-memory (list 1 2 3 4 5)
-			     (cons 1 3))
+                             (cons 1 3))
   (2 3))
