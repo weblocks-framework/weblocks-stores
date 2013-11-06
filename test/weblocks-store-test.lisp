@@ -107,7 +107,11 @@ returned."
          :db-constraints (:not-null :unique)
          :type integer)
      (slot-1 :initarg :slot-1 :accessor p-2-s-1 :type integer)
-     (slot-2 :initarg :slot-2 :accessor p-2-s-2 :type integer))))
+     (slot-2 :initarg :slot-2 :accessor p-2-s-2 :type integer)))
+  
+  (deftest-store class-order-by-join-classes-1 
+                 (weblocks-clsql::class-order-by-join-classes 'persistent-1 (cons 'slot-1 :desc)) 
+                 (persistent-1)))
 
 #+weblocks-store-test-ele
 (progn
