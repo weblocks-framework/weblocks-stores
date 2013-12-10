@@ -2,10 +2,6 @@
 ; Operations that support memory-backed stores
 (in-package :weblocks-memory)
 
-(export '(make-scratch-store objects-from-scratch-store
-          order-objects-in-memory strictly-less-p equivalentp
-          range-objects-in-memory))
-
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;; Scratch stores ;;;
 ;;;;;;;;;;;;;;;;;;;;;;

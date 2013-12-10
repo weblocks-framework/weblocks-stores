@@ -1,8 +1,6 @@
 
 (in-package :weblocks-memory)
 
-(export '(memory-store))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initialization/finalization ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
