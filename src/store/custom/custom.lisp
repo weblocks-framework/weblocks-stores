@@ -2,12 +2,53 @@
 (in-package :weblocks-custom)
 
 (defclass custom-store ()
-  ((schema :initarg :classes :initform nil)))
+  ((schema :initarg :classes :initform nil))
+  (:documentation "A store which could be used for generic data structures. 
+                   Store schema is defined during 'defstore' call.
+                   Here is usage example, here we representing a list as store class 
+
+                   (defstore 
+                     *test-list-store* 
+                     :custom 
+                     :classes 
+                     (let ((data (list 'first 'second 'third)))
+                       (list 
+                         'cls-1 
+                         (list
+                           :object-id (lambda (item item-data)
+                                        (position item-data data))
+                           :slots (list 
+                                    (list 
+                                      'symbol 
+                                      (lambda (item item-data)
+                                        item-data))
+                                    (list 
+                                      'string 
+                                      (lambda (item item-data)
+                                        (string-upcase item-data))))
+                           :find-all-objects (lambda ()
+                                               data)))))
+
+                   (weblocks:open-stores)
+
+                   (find-persistent-objects *test-list-store* 'cls-1) 
+                   ; => 
+                   ; (#<CLS-1 id=   0 {140506C9}> #<CLS-1 id=   1 {14050759}>
+                   ;  #<CLS-1 id=   2 {140507E9}>)
+                   
+                   (loop for i in (find-persistent-objects *test-list-store* 'cls-1) collect (slot-value i 'symbol))
+                   ; => (FIRST SECOND THIRD)
+
+                   (loop for i in (find-persistent-objects *test-list-store* 'cls-1) collect (slot-value i 'string))
+                   ; => (\"FIRST\" \"SECOND\" \"THIRD\")
+
+                   "))
 
 (defclass data-element ()
   ((data-class :initform nil :initarg :data-class)
    (data :initform nil :initarg :data)
-   (store :initform nil :initarg :store)))
+   (store :initform nil :initarg :store))
+  (:documentation "A wrapper for custom classes objects. For every object of custom-store a new 'data-element' is created with 'data' slot set to object"))
 
 (defmethod initialize-instance :before ((obj custom-store) &rest args &key redefining-p)
   (let ((schema (getf args :classes)))
@@ -26,10 +67,12 @@
   (setf *default-store* (apply #'make-instance (list* 'custom-store args))))
 
 (defmethod close-store ((store custom-store))
+  "Calls 'close-store' function for schema, destroys every schema class created before."
   (with-slots (schema) store
     (loop for (key value) on schema :by #'cddr do
           (when (getf value :close-store)
-            (funcall (getf value :close-store) store)))))
+            (funcall (getf value :close-store) store))
+          (setf (find-class key) nil))))
 
 (defmacro with-class-property (store class-name property &body body)
   `(with-slots (schema) ,store 

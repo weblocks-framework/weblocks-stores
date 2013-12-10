@@ -6,7 +6,11 @@
           dynamic-transaction use-dynamic-transaction-p
           persist-object delete-persistent-object
           delete-persistent-object-by-id find-persistent-objects
-          find-persistent-object-by-id count-persistent-objects replace-on-redefine-p))
+          find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores*))
+
+(defvar *debug-stores* t)
+(setf (documentation '*debug-stores* 'variable)
+      "Debugging flag, set 'T' to see record ids in repl, set 'NIL' to have usual objects behavior.")
 
 ;;; Store initialization and finalization
 (defgeneric open-store (store-type &rest args)
