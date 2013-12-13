@@ -3,7 +3,7 @@
   (:use :cl :metabang.utilities :clsql :weblocks-stores)
   (:shadowing-import-from :metabang.utilities #:format-date #:filter
                           #:print-date)
-  (:import-from :weblocks-util #:drop-last)
+  (:import-from :weblocks-util #:drop-last #:find-slot-esd)
   (:documentation
    "A driver for weblocks backend store API that connects to CLSQL."))
 
