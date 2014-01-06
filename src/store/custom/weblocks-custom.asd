@@ -9,10 +9,10 @@
   :name "weblocks-custom"
   :maintainer "Olexiy Zamkoviy, Scott L. Burson"
   :author "Olexiy Zamkoviy"
-  :version "0.0.5"
+  :version "0.0.6"
   :licence "LLGPL"
   :description "A weblocks backend for custom store for any object."
-  :depends-on (:weblocks-stores :weblocks-memory)
+  :depends-on (:weblocks-stores :weblocks-memory :weblocks)
   :components 
   ((:file "custom-store")
    (:file "custom"
