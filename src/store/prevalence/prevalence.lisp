@@ -160,3 +160,6 @@ requires all objects to have the given value in the given slot."
 (defun make-persistent-instance (store class &rest initargs)
   (persist-object store (apply #'make-instance class initargs)))
 
+(defmethod list-model-classes ((store prevalence-system))
+  (loop for i being the hash-keys of (cl-prevalence::get-root-objects store)
+        collect i))

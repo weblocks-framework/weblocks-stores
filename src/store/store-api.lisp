@@ -6,7 +6,7 @@
           dynamic-transaction use-dynamic-transaction-p
           persist-object delete-persistent-object
           delete-persistent-object-by-id find-persistent-objects
-          find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores*))
+          find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores* list-model-classes))
 
 (defvar *debug-stores* t)
 (setf (documentation '*debug-stores* 'variable)
@@ -140,3 +140,6 @@
   (:documentation "When true replaces existing store on reexecuting (defstore ...) block.")
   (:method (store-type)
    nil))
+
+(defgeneric list-model-classes (store)
+  (:documentation "Returns list with symbols - models class names"))
