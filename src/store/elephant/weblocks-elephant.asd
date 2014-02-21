@@ -9,7 +9,7 @@
   :name "weblocks-elephant"
   :maintainer "Ian Eslick, Olexiy Zamkoviy, Scott L. Burson"
   :author "Ian Eslick"
-  :version "0.1.1"
+  :version "0.1.2"
   :licence "LLGPL"
   :description "A weblocks backend for elephant."
   :depends-on (:moptilities :metatilities :elephant :weblocks :weblocks-memory :weblocks-stores)

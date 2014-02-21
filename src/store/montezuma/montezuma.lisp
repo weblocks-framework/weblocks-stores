@@ -7,6 +7,8 @@
 
 (in-package :weblocks-montezuma)
 
+(weblocks-stores:register-store-type :montezuma)
+
 (defvar *sorting-enabled-p* nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

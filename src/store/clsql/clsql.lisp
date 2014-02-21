@@ -11,6 +11,8 @@
 
 (export '(order-by-expression range-to-offset range-to-limit))
 
+(weblocks-stores:register-store-type :clsql)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initialization/finalization ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -3,7 +3,7 @@
 
 (export '(class-id-slot-name object-id-slot-name object-id id
           class-store object-store defstore persist-objects
-          mapstores open-stores *store-names* close-stores))
+          mapstores open-stores *store-names* close-stores list-store-types register-store-type))
 
 (declaim (special *default-store*))
 
@@ -188,3 +188,11 @@ were defined. Returns NIL."
       (print-unreadable-object (obj stream :type t :identity t)
         (format stream "id=~4@A" id))
       (call-next-method))))
+
+(defvar *store-types* nil)
+
+(defun register-store-type (store-type)
+  (push store-type *store-types*))
+
+(defun list-store-types ()
+  *store-types*)

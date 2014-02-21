@@ -1,6 +1,8 @@
 
 (in-package :weblocks-custom)
 
+(weblocks-stores:register-store-type :custom)
+
 (defclass custom-store ()
   ((schema :initarg :classes :initform nil))
   (:documentation "A store which could be used for generic data structures. 
@@ -187,3 +189,8 @@
   "No need in cleaning, just overriding"
   (declare (ignore store)))
 
+(defmethod list-model-classes ((store custom-store))
+  (loop for item in (slot-value store 'schema)
+        for i from 0
+        if (evenp i)
+        collect item))

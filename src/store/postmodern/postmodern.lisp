@@ -9,6 +9,8 @@
 
 (export '())
 
+(weblocks-stores:register-store-type :postmodern)
+
 (defvar *transactions* (make-hash-table))
 (defvar *nested-transaction-behavior* :ignore
   "Should be one of :warn, :error or :ignore.

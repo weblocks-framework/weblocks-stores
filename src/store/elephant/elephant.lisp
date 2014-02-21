@@ -12,6 +12,8 @@
 
 (export '(elephant-store))
 
+(weblocks-stores:register-store-type :elephant)
+
 (defclass elephant-store ()
   ((controller :accessor elephant-controller :initarg :controller)
    (stdidx :accessor elephant-stdobj-index)))

@@ -9,6 +9,8 @@
 
 (in-package :weblocks-prevalence)
 
+(weblocks-stores:register-store-type :prevalence)
+
 (defvar *locks* (make-hash-table :test #'eq)
   "Locks for Prevalence operation guards; one lock per store.")
 

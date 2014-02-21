@@ -7,7 +7,7 @@
   :name "weblocks-postmodern"
   :maintainer "Brit Butler, Olexiy Zamkoviy, Scott L. Burson"
   :author "Brit Butler"
-  :version "0.1.1"
+  :version "0.1.2"
   :licence "LLGPL"
   :description "A weblocks backend for PostgreSQL using postmodern."
   :depends-on (:postmodern :weblocks :weblocks-stores)

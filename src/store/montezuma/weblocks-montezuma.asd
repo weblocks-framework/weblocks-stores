@@ -9,7 +9,7 @@
   :name "weblocks-montezuma"
   :maintainer "Olexiy Zamkoviy"
   :author "Olexiy Zamkoviy"
-  :version "0.0.2"
+  :version "0.0.3"
   :licence "LLGPL"
   :description "A weblocks backend for montezuma."
   :depends-on (:montezuma :weblocks)

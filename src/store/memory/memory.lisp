@@ -1,6 +1,8 @@
 
 (in-package :weblocks-memory)
 
+(weblocks-stores:register-store-type :memory)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Initialization/finalization ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

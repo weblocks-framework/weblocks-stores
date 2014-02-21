@@ -9,7 +9,7 @@
   :name "weblocks-memory"
   :maintainer "Olexiy Zamkoviy, Scott L. Burson"
   :author "Slava Akhmechet"
-  :version "0.1.2"
+  :version "0.1.3"
   :licence "LLGPL"
   :description "A weblocks backend for memory (not backed on disk)."
   :depends-on (:metatilities :cl-ppcre :weblocks-stores)
