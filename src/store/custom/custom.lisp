@@ -31,7 +31,7 @@
                            :find-all-objects (lambda ()
                                                data)))))
 
-                   (weblocks:open-stores)
+                   (weblocks-stores:open-stores)
 
                    (find-persistent-objects *test-list-store* 'cls-1) 
                    ; => 
@@ -145,7 +145,7 @@
           (error "Object id (~A) for ~A is not integer, please provide correct :object-id lambda" id obj))
         id))))
 
-(defmethod weblocks:class-visible-slots-impl :around (class &key readablep writablep)
+(defmethod class-visible-slots-impl :around (class &key readablep writablep)
   (declare (ignore readablep writablep))
   (if (subtypep class 'data-element)
     (mapstores 
@@ -154,7 +154,7 @@
           (with-class-property store (class-name class) slots 
             (when slots 
               (return-from 
-                weblocks:class-visible-slots-impl 
+                class-visible-slots-impl 
                 (loop for (slot accessor) in slots 
                       collect (make-instance 
                                 'custom-slot 

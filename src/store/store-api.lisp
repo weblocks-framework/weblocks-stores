@@ -6,7 +6,8 @@
           dynamic-transaction use-dynamic-transaction-p
           persist-object delete-persistent-object
           delete-persistent-object-by-id find-persistent-objects
-          find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores* list-model-classes))
+          find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores* list-model-classes
+          class-visible-slots class-visible-slots-impl))
 
 (defvar *debug-stores* t)
 (setf (documentation '*debug-stores* 'variable)
@@ -143,3 +144,37 @@
 
 (defgeneric list-model-classes (store)
   (:documentation "Returns list with symbols - models class names"))
+
+;;; Scaffold utilities
+(defun class-visible-slots (cls &key readablep writablep)
+  "Converts 'cls' to class object if it is a name, and calls
+'class-visible-slots-impl'."
+  (class-visible-slots-impl (if (and (symbolp cls)
+                                     (not (null cls)))
+                                (find-class cls)
+                                cls)
+                            :readablep readablep
+                            :writablep writablep))
+
+(defgeneric class-visible-slots-impl (cls &key readablep writablep)
+  (:documentation "Returns a list of 'standard-direct-slot-definition'
+objects for a class and its subclasses. Slots objects for slots that
+do not have reader accessors are filtered out and not returned.
+
+If 'readablep' is true, filters out the slots that don't have a
+reader (or accessor) defined.
+If 'writablep' is true, filters out the slots that don't have a
+writer (or accessor) defined.")
+  (:method (cls &key readablep writablep)
+    (unless (or (null cls)
+                (eql (class-name cls) 'standard-object))
+      (remove-if (lambda (item)
+                   (or (null item)
+                       (and readablep
+                            (null (c2mop:slot-definition-readers item)))
+                       (and writablep
+                            (null (c2mop:slot-definition-writers item)))))
+                 (flatten
+                  (append (mapcar #'class-visible-slots
+                                  (c2mop:class-direct-superclasses cls))
+                          (c2mop:class-direct-slots cls)))))))

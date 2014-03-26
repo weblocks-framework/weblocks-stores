@@ -65,7 +65,7 @@
   (flet ((montezuma-document->object (doc)
            (let ((obj (make-instance class-name))
                  (field))
-             (loop for slot in (mapcar #'weblocks::slot-definition-name (class-visible-slots-impl (find-class class-name))) do 
+             (loop for slot in (mapcar #'c2mop:slot-definition-name (class-visible-slots-impl (find-class class-name))) do 
                    (setf field (montezuma:document-field doc (string-downcase slot)))
                    (setf (slot-value obj slot) 
                          (when field 

@@ -30,18 +30,18 @@
               new-name))))
 
 (defun def-to-proxy-slot (def)
-  `(,(weblocks::slot-definition-name def)
+  `(,(c2mop:slot-definition-name def)
      ,@(mapcan #'(lambda (arg)
                    `(:reader ,arg))
-               (weblocks::slot-definition-readers def))
+               (c2mop:slot-definition-readers def))
      ,@(mapcan #'(lambda (arg)
                    `(:writer ,arg))
-               (weblocks::slot-definition-writers def))
+               (c2mop:slot-definition-writers def))
      ,@(mapcan #'(lambda (arg)
                    `(:initarg ,arg))
-               (weblocks::slot-definition-initargs def))
-     :initform ,(weblocks::slot-definition-initform def)
-     :type ,(weblocks::slot-definition-type def)))
+               (c2mop:slot-definition-initargs def))
+     :initform ,(c2mop:slot-definition-initform def)
+     :type ,(c2mop:slot-definition-type def)))
    
 
 ;;
@@ -80,7 +80,7 @@
           (ele::maybe-persistent-sync instance)
           instance)
         (let ((instance (make-instance (base-class object))))
-          (loop for slot in (weblocks::class-slots (class-of object)) do
+          (loop for slot in (c2mop:class-slots (class-of object)) do
                (let ((slotname (weblocks::slot-definition-name slot)))
                  (unless (or (eq slotname 'base-class)
                              (eq slotname 'proxy-oid))

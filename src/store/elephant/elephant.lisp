@@ -73,15 +73,15 @@
 (defmethod class-visible-slots-impl ((class (eql (find-class 'persistent))) &key readablep writablep)
   (declare (ignore readablep writablep))
   (remove-if (lambda (dsd)
-               (or (eq (weblocks::slot-definition-name dsd) 'elephant::oid)
-                   (eq (weblocks::slot-definition-name dsd) 'elephant::spec)))
+               (or (eq (c2mop:slot-definition-name dsd) 'elephant::oid)
+                   (eq (c2mop:slot-definition-name dsd) 'elephant::spec)))
              (call-next-method)))
 
 (defmethod class-visible-slots-impl ((class (eql (find-class 'ele::cacheable-persistent-object))) &key readablep writablep)
   (declare (ignore readablep writablep))
   (remove-if (lambda (dsd)
-               (or (eq (weblocks::slot-definition-name dsd) 'elephant::pchecked-out)
-                   (eq (weblocks::slot-definition-name dsd) 'elephant::checked-out)))
+               (or (eq (c2mop:slot-definition-name dsd) 'elephant::pchecked-out)
+                   (eq (c2mop:slot-definition-name dsd) 'elephant::checked-out)))
              (call-next-method)))
                
 ;;;;;;;;;;;;;;;;;;;;
