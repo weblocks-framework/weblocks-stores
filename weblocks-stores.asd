@@ -9,7 +9,7 @@
    :name "weblocks-stores"
    :maintainer "Olexiy Zamkoviy, Scott L. Burson"
    :author "Olexiy Zamkoviy"
-   :version "0.2.1"
+   :version "0.2.2"
    :licence "LLGPL"
    :description "A base for weblocks stores"
    :depends-on (:closer-mop :metatilities :weblocks-util)

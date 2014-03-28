@@ -17,7 +17,8 @@ name the slot that holds the class' unique ID differently."))
 
 (defmethod class-id-slot-name ((class t))
   (loop for i in (c2mop:class-slots (find-class class))
-        if (string (c2mop:slot-definition-name i))
+        if (string= "ID" 
+                    (string (c2mop:slot-definition-name i)))
         do 
         (return-from class-id-slot-name (c2mop:slot-definition-name i)))
 
