@@ -16,6 +16,11 @@ implementation returns 'ID'. Specialize this function if you want to
 name the slot that holds the class' unique ID differently."))
 
 (defmethod class-id-slot-name ((class t))
+  (loop for i in (c2mop:class-slots (find-class class))
+        if (string (c2mop:slot-definition-name i))
+        do 
+        (return-from class-id-slot-name (c2mop:slot-definition-name i)))
+
   'id)
 
 (defun object-id-slot-name (obj)
