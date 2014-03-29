@@ -1,6 +1,6 @@
 
 (defpackage #:weblocks-montezuma
-  (:use :cl :weblocks :weblocks-stores)
+  (:use :cl :weblocks-stores)
   (:documentation
    "A driver for weblocks backend store API that connects to montezuma index.")
   (:export #:*sorting-enabled-p*))
