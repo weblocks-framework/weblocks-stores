@@ -7,7 +7,7 @@
           persist-object delete-persistent-object
           delete-persistent-object-by-id find-persistent-objects
           find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores* list-model-classes
-          class-visible-slots class-visible-slots-impl))
+          class-visible-slots class-visible-slots-impl delete-model-class))
 
 (defvar *debug-stores* t)
 (setf (documentation '*debug-stores* 'variable)
@@ -178,3 +178,8 @@ writer (or accessor) defined.")
                   (append (mapcar #'class-visible-slots
                                   (c2mop:class-direct-superclasses cls))
                           (c2mop:class-direct-slots cls)))))))
+
+(defgeneric delete-model-class (store  cls)
+  (:method (store cls)
+   (:documentation "Completely removes model class. `list-model-classes` should not contain class after calling this method.")
+   (setf (find-class cls) nil)))

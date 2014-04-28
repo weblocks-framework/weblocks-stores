@@ -9,7 +9,7 @@
   :name "weblocks-prevalence"
   :maintainer "Olexiy Zamkoviy, Scott L. Burson"
   :author "Slava Akhmechet"
-  :version "0.1.4"
+  :version "0.2.0"
   :licence "LLGPL"
   :description "A weblocks backend for cl-prevalence."
   :depends-on (:metatilities :cl-ppcre :cl-prevalence :bordeaux-threads :weblocks-memory :weblocks-stores)

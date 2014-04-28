@@ -165,3 +165,8 @@ requires all objects to have the given value in the given slot."
 (defmethod list-model-classes ((store prevalence-system))
   (loop for i being the hash-keys of (cl-prevalence::get-root-objects store)
         collect i))
+
+(defmethod delete-model-class ((store prevalence-system) class-name)
+  (let ((objects (cl-prevalence::get-root-objects store)))
+    (remhash class-name objects))
+  (call-next-method))
