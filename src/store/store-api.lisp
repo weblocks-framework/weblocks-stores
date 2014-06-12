@@ -7,7 +7,7 @@
           persist-object delete-persistent-object
           delete-persistent-object-by-id find-persistent-objects
           find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores* list-model-classes
-          class-visible-slots class-visible-slots-impl delete-model-class))
+          class-visible-slots class-visible-slots-impl delete-model-class serialize unserialize *default-serialization-format*))
 
 (defvar *debug-stores* t)
 (setf (documentation '*debug-stores* 'variable)
