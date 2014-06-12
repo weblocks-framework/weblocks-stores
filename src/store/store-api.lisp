@@ -183,3 +183,13 @@ writer (or accessor) defined.")
             (:documentation "Completely removes model class. `list-model-classes` should not contain class after calling this method.")
             (:method (store cls)
                      (setf (find-class cls) nil)))
+
+(defvar *default-serialization-format* nil)
+(setf (documentation '*default-serialization-format* 'variable)
+      "Debugging flag, set 'T' to see record ids in repl, set 'NIL' to have usual objects behavior.")
+
+(defgeneric serialize (obj &key format)
+  (:documentation "Method for serialization of objects, objects sets for specific model and stores."))
+
+(defgeneric unserialize (obj &key format)
+  (:documentation "Method for deserialization of objects, objects sets for specific model and stores."))
