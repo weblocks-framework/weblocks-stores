@@ -6,11 +6,8 @@
 (in-package :weblocks-store-test)
 
 (defun do-all-tests ()
-  (run-tests :suite 'store-suite))
-
-(deftestsuite weblocks-suite ()
-  ()
-  (:dynamic-variables weblocks::*rendered-actions*))
+  (run-tests :suite 'store-suite)
+  (run-tests :suite 'prevalence-suite))
 
 (defmacro set-sensible-suite ()
   "Set up a sensible testsuite to use as the testsuite for addtest
@@ -46,8 +43,10 @@ I am expanded.  Likely to work only at toplevel."
 (deftestsuite store-suite ()
   ()
   (:setup (weblocks-stores:open-stores))
-  (:teardown (mapstores #'clean-store)
-             (weblocks-stores::close-stores))
+  (:teardown 
+    (clean-store *not-searchable-store*)
+    (clean-store *test-store*)
+    (weblocks-stores::close-stores))
   (:documentation "Tests for the store API and implementations on
   currently defined stores."))
 
