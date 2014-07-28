@@ -7,7 +7,8 @@
           persist-object delete-persistent-object
           delete-persistent-object-by-id find-persistent-objects
           find-persistent-object-by-id count-persistent-objects replace-on-redefine-p *debug-stores* list-model-classes
-          class-visible-slots class-visible-slots-impl delete-model-class serialize unserialize *default-serialization-format*))
+          class-visible-slots class-visible-slots-impl delete-model-class serialize unserialize *default-serialization-format* 
+          store-type))
 
 (defvar *debug-stores* t)
 (setf (documentation '*debug-stores* 'variable)
@@ -193,3 +194,10 @@ writer (or accessor) defined.")
 
 (defgeneric unserialize (obj &key format)
   (:documentation "Method for deserialization of objects, objects sets for specific model and stores."))
+
+(defgeneric store-type (store)
+  (:documentation "Should return keyword type of store")
+  (:method ((store null))
+   nil)
+  (:method (store)
+   (error "Unimplemented store-type for class of store ~A" store)))

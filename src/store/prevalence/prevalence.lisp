@@ -170,3 +170,6 @@ requires all objects to have the given value in the given slot."
   (let ((objects (cl-prevalence::get-root-objects store)))
     (remhash class-name objects))
   (call-next-method))
+
+(defmethod store-type ((store prevalence-system))
+  :prevalence)
