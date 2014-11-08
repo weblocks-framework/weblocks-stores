@@ -145,19 +145,19 @@
        ,results)))
 
 (defmethod find-persistent-objects ((store elephant-store) class-name
-                                    &key order-by range filter-fn &allow-other-keys)
+                                    &key order-by range filter &allow-other-keys)
   "This implements a reasonably efficient form of the core weblocks query
    functionality for paged displays of objects.  More sophisticated stuff
    can be done via the on-query facility."
   (if (subtypep class-name 'persistent-object)
       (with-store-controller store
         (catch 'finish-map
-          (cond (filter-fn
+          (cond (filter
                  (range-objects-in-memory
                   (advanced-order-objects-in-memory
                    (filter-objects-in-memory
                     (get-instances-by-class class-name)
-                    filter-fn)
+                    filter)
                    order-by)
                   range))
                 ((and (consp order-by) (has-index class-name (car order-by)))
@@ -189,7 +189,7 @@
       (find-persistent-standard-objects store class-name
                                         :order-by order-by
                                         :range range
-                                        :filter-fn filter-fn)))
+                                        :filter filter)))
 
 (defun filter-objects-in-memory (objects fn &aux results)
   (labels ((filter-if (object)
@@ -224,14 +224,14 @@
                       (not (weblocks-memory::equivalentp a-value b-value)))))))))
 
 (defmethod count-persistent-objects ((store elephant-store) class-name
-                                     &key filter-fn &allow-other-keys)
+                                     &key filter &allow-other-keys)
   "A reasonably fast method for counting class instances"
   (if (subtypep class-name 'persistent-object)
       (with-store-controller store
         (let ((count 0))
           (flet ((counter (x)
-                   (unless (and filter-fn 
-                                (funcall filter-fn 
+                   (unless (and filter 
+                                (funcall filter 
                                          (elephant::controller-recreate-instance 
                                           *store-controller* x)))
                      (incf count))))
@@ -310,7 +310,7 @@
     (get-value object-id (elephant-stdobj-index store))))
 
 
-(defun find-persistent-standard-objects (store class-name &key order-by range filter-fn)
+(defun find-persistent-standard-objects (store class-name &key order-by range filter)
   "This implements a slow version of lookup"
   (range-objects-in-memory
    (order-objects-in-memory
@@ -322,8 +322,8 @@
                             :value class-name
                             :collect t)))
         (if (and seq
-                 (functionp filter-fn))
-            (remove-if-not filter-fn seq)
+                 (functionp filter))
+            (remove-if-not filter seq)
             seq)))
     order-by)
    range))
