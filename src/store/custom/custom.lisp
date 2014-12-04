@@ -89,12 +89,22 @@
       (funcall count-objects class-name)
       (length (find-persistent-objects store class-name)))))
 
+(defvar *objects-cache* (tg:make-weak-hash-table :test 'equal))
+(defun maybe-return-object-from-cache (store cls obj)
+  (let ((classes-cache (or (gethash store *objects-cache*) 
+                           (setf (gethash store *objects-cache*) (tg:make-weak-hash-table :test 'equal))))
+        (key (format nil "~A-~A" cls (object-id obj))))
+    (or (gethash key classes-cache)
+        (setf (gethash key classes-cache) obj))))
+
 (defun object->data-element (object class-name store)
   "Transforms some data to weblocks-custom:data-element "
-  (make-instance class-name 
-                 :data object 
-                 :data-class class-name 
-                 :store store))
+  (let ((transformed-obj (make-instance class-name 
+                                        :data object 
+                                        :data-class class-name 
+                                        :store store)))
+
+    (maybe-return-object-from-cache store class-name transformed-obj)))
 
 (defun objects->data-elements (list-of-objects class-name store)
   "Transforms list of data elements to weblocks-custom:data-element"
