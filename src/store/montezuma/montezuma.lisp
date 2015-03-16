@@ -57,20 +57,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 #+l(defmethod find-persistent-object-by-id ((store database) class-name object-id))
 
+(defun montezuma-document->object (class-name doc)
+  (let ((obj (make-instance class-name))
+        (field))
+    (loop for slot in (mapcar #'c2mop:slot-definition-name (class-visible-slots-impl (find-class class-name))) do 
+          (setf field (montezuma:document-field doc (string-downcase slot)))
+          (setf (slot-value obj slot) 
+                (when field 
+                  (montezuma:field-data field))))
+    obj))
+
 (defmethod find-persistent-objects ((store montezuma:index)
                                     class-name &key
                                     order-by range where &allow-other-keys)
   (when where
     (error "Unimplemented"))
-  (flet ((montezuma-document->object (doc)
-           (let ((obj (make-instance class-name))
-                 (field))
-             (loop for slot in (mapcar #'c2mop:slot-definition-name (class-visible-slots-impl (find-class class-name))) do 
-                   (setf field (montezuma:document-field doc (string-downcase slot)))
-                   (setf (slot-value obj slot) 
-                         (when field 
-                           (montezuma:field-data field))))
-             obj)))
 
     (let ((result))
       (montezuma:each 
@@ -93,11 +94,12 @@
         (lambda (score-doc)
           (push 
             (montezuma-document->object 
+              class-name
               (montezuma:get-document 
                 *default-store* (montezuma:doc score-doc)))
             result)))
 
-      result)))
+      result))
 
 (defmethod count-persistent-objects ((store montezuma:index) 
                                      class-name
