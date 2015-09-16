@@ -185,16 +185,6 @@ were defined. Returns NIL."
   (dolist (obj objects)
     (apply #'persist-object store obj keys)))
 
-(defmethod print-object ((obj standard-object) stream)
-  (unless *debug-stores* 
-    (return-from print-object (call-next-method)))
-
-  (let ((id (ignore-errors (object-id obj))))
-    (if id 
-      (print-unreadable-object (obj stream :type t :identity t)
-        (format stream "id=~4@A" id))
-      (call-next-method))))
-
 (defvar *store-types* nil)
 
 (defun register-store-type (store-type)
