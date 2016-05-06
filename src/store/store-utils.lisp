@@ -185,15 +185,17 @@ were defined. Returns NIL."
   (dolist (obj objects)
     (apply #'persist-object store obj keys)))
 
-(defmethod print-object ((obj standard-object) stream)
-  (unless *debug-stores* 
-    (return-from print-object (call-next-method)))
+; This method is prohibited by CLHS 11.1.2.1.2 #19 but still works and useful for SBCL
+#+sbcl(defmethod print-object ((obj standard-object) stream)
+        "Nicely prints object ids when printing store items"
+        (unless *debug-stores* 
+          (return-from print-object (call-next-method)))
 
-  (let ((id (ignore-errors (object-id obj))))
-    (if id 
-      (print-unreadable-object (obj stream :type t :identity t)
-        (format stream "id=~4@A" id))
-      (call-next-method))))
+        (let ((id (ignore-errors (object-id obj))))
+          (if id 
+            (print-unreadable-object (obj stream :type t :identity t)
+              (format stream "id=~4@A" id))
+            (call-next-method))))
 
 (defvar *store-types* nil)
 
